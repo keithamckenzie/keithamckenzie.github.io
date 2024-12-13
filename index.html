@@ -31,25 +31,58 @@
       color: #fff;
       border: none;
     }
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <h1>Contact McKenzie Consultants</h1>
-  <form action="https://api.web3forms.com/submit" method="POST">
-    <!-- Replace this with your actual access key from Web3Forms -->
-    <input type="hidden" name="access_key" value="a013919e-5742-436d-bb3c-b74b2ca96de9" />
-    <!-- This ensures that only forms from your domain are accepted -->
-    
-    <label for="name">Name</label>
-    <input type="text" name="name" id="name" placeholder="Your Name" required>
+  
+  <div id="form-container">
+    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+      <!-- Your Web3Forms Key -->
+      <input type="hidden" name="access_key" value="a013919e-5742-436d-bb3c-b74b2ca96de9" />
 
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email" placeholder="Your Email Address" required>
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email Address" required>
+      <textarea name="message" placeholder="Your Message" required></textarea>
 
-    <label for="message">Message</label>
-    <textarea name="message" id="message" placeholder="Your Message" required></textarea>
+      <button type="submit">Send</button>
+    </form>
 
-    <button type="submit">Send</button>
-  </form>
+    <div id="thank-you" class="hidden">
+      <h2>Thank you for contacting us!</h2>
+      <p>We’ll get back to you soon.</p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+      e.preventDefault(); // Stop the browser's default form submission
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      fetch(form.getAttribute('action'), {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        if(data.success) {
+          // Hide the form and show the thank-you message
+          form.classList.add('hidden');
+          document.getElementById('thank-you').classList.remove('hidden');
+        } else {
+          alert("Something went wrong, please try again.");
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert("There was an error submitting your form.");
+      });
+    });
+  </script>
 </body>
 </html>
