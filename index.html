@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>McKenzie Consultants</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 0 20px;
+      line-height: 1.5;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    input, textarea, button {
+      margin-bottom: 20px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      cursor: pointer;
+      background: #333;
+      color: #fff;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Contact McKenzie Consultants</h1>
+  <form action="https://api.web3forms.com/submit" method="POST">
+    <!-- Replace this with your actual access key from Web3Forms -->
+    <input type="hidden" name="access_key" value="a013919e-5742-436d-bb3c-b74b2ca96de9" />
+    <!-- This ensures that only forms from your domain are accepted -->
+    
+    <label for="name">Name</label>
+    <input type="text" name="name" id="name" placeholder="Your Name" required>
+
+    <label for="email">Email</label>
+    <input type="email" name="email" id="email" placeholder="Your Email Address" required>
+
+    <label for="message">Message</label>
+    <textarea name="message" id="message" placeholder="Your Message" required></textarea>
+
+    <button type="submit">Send</button>
+  </form>
+</body>
+</html>
