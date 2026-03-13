@@ -2,66 +2,879 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>McKenzie Consultants</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src https://api.web3forms.com; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action https://api.web3forms.com;" />
+  <meta name="description" content="McKenzie Consultants — Strategic advisory and consulting services. We partner with organizations to solve complex challenges and drive measurable outcomes." />
+  <meta name="keywords" content="consulting, strategy, advisory, McKenzie Consultants, business consulting" />
+  <meta property="og:title" content="McKenzie Consultants" />
+  <meta property="og:description" content="Strategic advisory and consulting services. We partner with organizations to solve complex challenges." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mckenzieconsultants.com" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="McKenzie Consultants" />
+  <meta name="twitter:description" content="Strategic advisory and consulting services." />
+  <title>McKenzie Consultants — Strategic Advisory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #1a1714;
+      --ink-light: #2e2a25;
+      --cream: #f5f0e8;
+      --cream-dark: #e8e0d4;
+      --warm: #c9a96e;
+      --warm-text: #7a6230;
+      --warm-light: #d4bb8a;
+      --warm-muted: rgba(201, 169, 110, 0.15);
+      --text-secondary: #6b6560;
+      --border: rgba(26, 23, 20, 0.08);
+      --font-display: 'Cormorant Garamond', Georgia, serif;
+      --font-body: 'Outfit', system-ui, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
     body {
-      font-family: sans-serif;
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 0 20px;
-      line-height: 1.5;
+      font-family: var(--font-body);
+      background: var(--cream);
+      color: var(--ink);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
-    h1 {
-      text-align: center;
-      margin-bottom: 40px;
+
+    /* ---- Grain overlay ---- */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.025;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
     }
-    form {
+
+    /* ---- Reveal animations ---- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1),
+                  transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---- Navigation ---- */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 24px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.4s, backdrop-filter 0.4s, padding 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(245, 240, 232, 0.85);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .nav-links a:hover {
+      color: var(--ink);
+    }
+
+    /* ---- Mobile menu ---- */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      flex-direction: column;
+      gap: 5px;
+      z-index: 101;
+    }
+    .nav-toggle span {
+      display: block;
+      width: 24px;
+      height: 1.5px;
+      background: var(--ink);
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-toggle.active span:nth-child(1) {
+      transform: rotate(45deg) translate(4px, 5px);
+    }
+    .nav-toggle.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .nav-toggle.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(4px, -5px);
+    }
+
+    /* ---- Hero ---- */
+    .hero {
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 48px 80px;
+      position: relative;
     }
-    input, textarea, button {
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, var(--warm-muted) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--warm-text);
+      margin-bottom: 28px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7.5vw, 6.5rem);
+      font-weight: 400;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      max-width: 900px;
+      opacity: 0;
+      animation: fadeUp 1s 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--warm-text);
+    }
+    .hero-sub {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      font-weight: 300;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 520px;
+      margin-top: 32px;
+      opacity: 0;
+      animation: fadeUp 1s 0.75s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    .hero-cta {
+      margin-top: 48px;
+      opacity: 0;
+      animation: fadeUp 1s 1s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    .hero-cta a {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 16px 44px;
+      border: 1.5px solid var(--ink);
+      transition: background 0.4s, color 0.4s;
+    }
+    .hero-cta a:hover {
+      background: var(--ink);
+      color: var(--cream);
+    }
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0;
+      animation: fadeUp 1s 1.3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+    .hero-scroll span {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: var(--ink);
+      opacity: 0.2;
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.15; transform: scaleY(1); }
+      50%      { opacity: 0.4;  transform: scaleY(1.15); }
+    }
+
+    /* ---- Divider ---- */
+    .divider {
+      width: 64px;
+      height: 1px;
+      background: var(--warm);
+      margin: 0 auto;
+      opacity: 0.5;
+    }
+
+    /* ---- About section ---- */
+    .about {
+      padding: 120px 48px;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-label {
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--warm-text);
       margin-bottom: 20px;
-      padding: 10px;
-      font-size: 16px;
     }
-    button {
-      cursor: pointer;
-      background: #333;
-      color: #fff;
+    .about h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .about-text {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .about-text p {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    /* ---- Services ---- */
+    .services {
+      padding: 120px 48px;
+      background: var(--ink);
+      color: var(--cream);
+      position: relative;
+    }
+    .services::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(201, 169, 110, 0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .services-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .services-header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+    .services-header .about-label {
+      color: var(--warm-light);
+    }
+    .services-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--cream);
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(245, 240, 232, 0.06);
+    }
+    .service-card {
+      padding: 48px 36px;
+      background: var(--ink);
+      transition: background 0.5s;
+    }
+    .service-card:hover {
+      background: var(--ink-light);
+    }
+    .service-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 400;
+      color: var(--warm);
+      opacity: 0.4;
+      margin-bottom: 24px;
+      line-height: 1;
+    }
+    .service-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 16px;
+      letter-spacing: -0.01em;
+    }
+    .service-card p {
+      font-size: 0.9rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: rgba(245, 240, 232, 0.55);
+    }
+
+    /* ---- Contact ---- */
+    .contact {
+      padding: 120px 48px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .contact-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    .contact-header h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .contact-header p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+      margin-top: 16px;
+      line-height: 1.7;
+    }
+
+    #contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .form-group {
+      position: relative;
+      border-bottom: 1px solid var(--border);
+    }
+    .form-group label {
+      position: absolute;
+      top: 24px;
+      left: 0;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 32px 0 16px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--ink);
+      background: transparent;
       border: none;
+      outline: none;
     }
-    .hidden {
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: transparent;
+    }
+    .form-group input:focus + label,
+    .form-group input:not(:placeholder-shown) + label,
+    .form-group textarea:focus + label,
+    .form-group textarea:not(:placeholder-shown) + label {
+      top: 8px;
+      font-size: 0.6rem;
+      color: var(--warm-text);
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    .form-group::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 1.5px;
+      background: var(--warm);
+      transition: width 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .form-group:focus-within::after {
+      width: 100%;
+    }
+
+    /* Honeypot - hidden from real users */
+    .hp-field {
+      position: absolute;
+      left: -9999px;
+      top: -9999px;
+      opacity: 0;
+      height: 0;
+      width: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .form-submit {
+      margin-top: 48px;
+      text-align: center;
+    }
+    .form-submit button {
+      font-family: var(--font-body);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--cream);
+      background: var(--ink);
+      border: none;
+      padding: 18px 56px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s;
+    }
+    .form-submit button::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--warm);
+      transform: translateY(100%);
+      transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .form-submit button:hover::before {
+      transform: translateY(0);
+    }
+    .form-submit button:hover {
+      transform: translateY(-1px);
+    }
+    .form-submit button span {
+      position: relative;
+      z-index: 1;
+    }
+    .form-submit button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .form-submit button:disabled:hover::before {
+      transform: translateY(100%);
+    }
+
+    /* Thank you state */
+    .thank-you {
+      text-align: center;
+      padding: 60px 0;
       display: none;
     }
+    .thank-you.visible {
+      display: block;
+      animation: fadeUp 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    .thank-you h3 {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 400;
+      margin-bottom: 12px;
+    }
+    .thank-you p {
+      font-size: 1rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      padding: 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+    .footer-copy {
+      font-size: 0.8rem;
+      font-weight: 300;
+      color: var(--text-secondary);
+    }
+
+    /* ---- Focus visible ---- */
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible {
+      outline: 2px solid var(--warm-text);
+      outline-offset: 3px;
+    }
+
+    /* ---- Button hover contrast fix ---- */
+    .form-submit button:hover span {
+      color: var(--ink);
+    }
+    .hero-cta a:focus-visible {
+      outline-offset: 5px;
+    }
+
+    /* ---- Reduced motion ---- */
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+      .reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+      .hero-eyebrow,
+      .hero h1,
+      .hero-sub,
+      .hero-cta,
+      .hero-scroll {
+        opacity: 1;
+        animation: none;
+      }
+      .scroll-line {
+        animation: none;
+        opacity: 0.2;
+      }
+      .thank-you.visible {
+        animation: none;
+      }
+      .form-group::after,
+      .form-group label,
+      .form-submit button::before,
+      nav,
+      .nav-links,
+      .nav-toggle span {
+        transition: none;
+      }
+    }
+
+    /* ---- Responsive ---- */
+    @media (max-width: 768px) {
+      nav {
+        padding: 20px 24px;
+      }
+      nav.scrolled {
+        padding: 14px 24px;
+      }
+      .nav-toggle {
+        display: flex;
+      }
+      .nav-links {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 280px;
+        height: 100vh;
+        background: var(--cream);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 32px;
+        transform: translateX(100%);
+        visibility: hidden;
+        transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), visibility 0.4s;
+        box-shadow: -8px 0 32px rgba(0, 0, 0, 0.08);
+        z-index: 99;
+      }
+      .nav-links.open {
+        transform: translateX(0);
+        visibility: visible;
+      }
+      .nav-links a {
+        font-size: 0.9rem;
+      }
+      .hero {
+        padding: 100px 24px 60px;
+      }
+      .about {
+        grid-template-columns: 1fr;
+        gap: 48px;
+        padding: 80px 24px;
+      }
+      .services {
+        padding: 80px 24px;
+      }
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+      .contact {
+        padding: 80px 24px;
+      }
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+
+    /* ---- Noscript fallback ---- */
+    .reveal {
+      /* JS adds .visible; noscript overrides below handle no-JS */
+    }
   </style>
+  <noscript>
+    <style>
+      .reveal { opacity: 1; transform: none; }
+      .hero-eyebrow, .hero h1, .hero-sub, .hero-cta, .hero-scroll { opacity: 1; animation: none; }
+      .nav-toggle { display: none !important; }
+      .nav-links { position: static !important; width: auto !important; height: auto !important; transform: none !important; visibility: visible !important; flex-direction: row !important; box-shadow: none !important; }
+    </style>
+  </noscript>
 </head>
 <body>
-  <h1>Contact McKenzie Consultants</h1>
-  
-  <div id="form-container">
-    <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
-      <!-- Your Web3Forms Key -->
-      <input type="hidden" name="access_key" value="a013919e-5742-436d-bb3c-b74b2ca96de9" />
 
-      <input type="text" name="name" placeholder="Your Name" required>
-      <input type="email" name="email" placeholder="Your Email Address" required>
-      <textarea name="message" placeholder="Your Message" required></textarea>
+  <!-- Navigation -->
+  <nav>
+    <a href="#top" class="nav-logo">McKenzie Consultants</a>
+    <button class="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <ul class="nav-links" id="nav-menu">
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-      <button type="submit">Send</button>
-    </form>
-
-    <div id="thank-you" class="hidden">
-      <h2>Thank you for contacting us!</h2>
-      <p>We’ll get back to you soon.</p>
+  <!-- Hero -->
+  <section class="hero" id="top">
+    <p class="hero-eyebrow">Strategic Advisory</p>
+    <h1>Clarity from<br><em>complexity</em></h1>
+    <p class="hero-sub">We partner with organizations to navigate ambiguity, sharpen strategy, and drive outcomes that endure.</p>
+    <div class="hero-cta">
+      <a href="#contact">Start a Conversation</a>
     </div>
-  </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <div class="divider"></div>
+  <section class="about" id="about">
+    <div class="reveal">
+      <p class="about-label">Who We Are</p>
+      <h2>Advisors who listen before they prescribe</h2>
+    </div>
+    <div class="about-text reveal" style="transition-delay: 0.15s;">
+      <p>McKenzie Consultants brings decades of cross-industry experience to every engagement. We believe the best strategies emerge from deep understanding, not assumptions.</p>
+      <p>Our approach is intentionally collaborative. We embed with your teams, challenge conventional thinking, and build frameworks that your organization can own long after our work together concludes.</p>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="services" id="services">
+    <div class="services-inner">
+      <div class="services-header reveal">
+        <p class="about-label">What We Do</p>
+        <h2>Focused expertise,<br>measurable impact</h2>
+      </div>
+      <div class="services-grid">
+        <div class="service-card reveal">
+          <div class="service-number">01</div>
+          <h3>Strategy &amp; Growth</h3>
+          <p>Market entry analysis, competitive positioning, and growth roadmaps grounded in data and real-world constraints.</p>
+        </div>
+        <div class="service-card reveal" style="transition-delay: 0.1s;">
+          <div class="service-number">02</div>
+          <h3>Operations</h3>
+          <p>Process optimization, organizational design, and operational frameworks that scale with your ambitions.</p>
+        </div>
+        <div class="service-card reveal" style="transition-delay: 0.2s;">
+          <div class="service-number">03</div>
+          <h3>Technology</h3>
+          <p>Digital transformation strategy, technology assessments, and implementation guidance for complex environments.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="contact" id="contact">
+    <div class="contact-header reveal">
+      <p class="about-label">Get in Touch</p>
+      <h2>Let's discuss what's next</h2>
+      <p>Tell us about your challenge. We'll respond within one business day.</p>
+    </div>
+
+    <div id="form-container" class="reveal" style="transition-delay: 0.15s;">
+      <form id="contact-form" action="https://api.web3forms.com/submit" method="POST">
+        <input type="hidden" name="access_key" value="a013919e-5742-436d-bb3c-b74b2ca96de9" />
+
+        <!-- Honeypot for spam protection -->
+        <div class="hp-field" aria-hidden="true">
+          <label>Leave this empty</label>
+          <input type="text" name="botcheck" tabindex="-1" autocomplete="off" />
+        </div>
+
+        <div class="form-group">
+          <input type="text" name="name" id="name" placeholder="Name" required autocomplete="name" />
+          <label for="name">Your Name</label>
+        </div>
+
+        <div class="form-group">
+          <input type="email" name="email" id="email" placeholder="Email" required autocomplete="email" />
+          <label for="email">Email Address</label>
+        </div>
+
+        <div class="form-group">
+          <textarea name="message" id="message" placeholder="Message" required></textarea>
+          <label for="message">How can we help?</label>
+        </div>
+
+        <div class="form-submit">
+          <button type="submit"><span>Send Message</span></button>
+        </div>
+      </form>
+
+      <div class="thank-you" id="thank-you" role="status" aria-live="polite" tabindex="-1">
+        <h3>Thank you</h3>
+        <p>We've received your message and will be in touch soon.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">McKenzie Consultants</div>
+    <div class="footer-copy">&copy; 2026 McKenzie Consultants. All rights reserved.</div>
+  </footer>
 
   <script>
+    // Scroll-triggered reveal (with feature check)
+    const reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      reveals.forEach(el => observer.observe(el));
+    } else {
+      reveals.forEach(el => el.classList.add('visible'));
+    }
+
+    // Nav scroll effect
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Mobile menu toggle
+    const toggle = document.querySelector('.nav-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    toggle.addEventListener('click', () => {
+      const isOpen = navLinks.classList.toggle('open');
+      toggle.classList.toggle('active');
+      toggle.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        toggle.classList.remove('active');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Form submission
     document.getElementById('contact-form').addEventListener('submit', function(e) {
-      e.preventDefault(); // Stop the browser's default form submission
+      e.preventDefault();
 
       const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const btnText = btn.querySelector('span');
+      const originalText = btnText.textContent;
+
+      btn.disabled = true;
+      btnText.textContent = 'Sending...';
+
       const formData = new FormData(form);
 
       fetch(form.getAttribute('action'), {
@@ -70,19 +883,24 @@
       })
       .then(response => response.json())
       .then(data => {
-        if(data.success) {
-          // Hide the form and show the thank-you message
-          form.classList.add('hidden');
-          document.getElementById('thank-you').classList.remove('hidden');
+        if (data.success) {
+          form.style.display = 'none';
+          const ty = document.getElementById('thank-you');
+          ty.classList.add('visible');
+          ty.focus();
         } else {
-          alert("Something went wrong, please try again.");
+          btn.disabled = false;
+          btnText.textContent = originalText;
+          alert('Something went wrong. Please try again.');
         }
       })
-      .catch(error => {
-        console.error('Error:', error);
-        alert("There was an error submitting your form.");
+      .catch(() => {
+        btn.disabled = false;
+        btnText.textContent = originalText;
+        alert('There was an error submitting your form. Please try again.');
       });
     });
   </script>
+
 </body>
 </html>
